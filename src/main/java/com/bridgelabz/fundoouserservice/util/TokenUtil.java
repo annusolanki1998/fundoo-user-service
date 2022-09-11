@@ -12,8 +12,9 @@ import org.springframework.stereotype.Component;
 
 /**
  * Purpose: Creating token util class
+ *
  * @author: Annu kumari
- * @Param:  create,decode
+ * @Param: create, decode
  * Version: 1.0
  */
 
@@ -23,6 +24,7 @@ public class TokenUtil {
 
     /**
      * Purpose : Creating method to create a token
+     *
      * @author : Annu Kumari
      * @Param : id
      */
@@ -45,6 +47,7 @@ public class TokenUtil {
 
     /**
      * Purpose : Creating method to decode a token
+     *
      * @author : Annu Kumari
      * @Param : token
      */

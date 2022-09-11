@@ -27,10 +27,6 @@ public class UserDTO {
     @Pattern(regexp = "(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}", message = "Invalid password")
     private String password;
 
-    private String isActive;
-
-    private String isDeleted;
-
     @NotNull(message = "DOB should not be empty")
     private Date DOB;
 

@@ -24,8 +24,8 @@ public class UserModel {
     private String name;
     private String emailId;
     private String password;
-    private String isActive;
-    private String isDeleted;
+    private boolean active;
+    private boolean deleted;
     private Date DOB;
     private String phoneNumber;
     private String profilePic;
@@ -36,13 +36,10 @@ public class UserModel {
         this.name = userDTO.getName();
         this.emailId = userDTO.getEmailId();
         this.password = userDTO.getPassword();
-        this.isActive = userDTO.getIsActive();
-        this.isDeleted = userDTO.getIsDeleted();
         this.DOB = userDTO.getDOB();
         this.phoneNumber = userDTO.getPhoneNumber();
         this.profilePic = userDTO.getProfilePic();
     }
-
 
     public UserModel() {
 

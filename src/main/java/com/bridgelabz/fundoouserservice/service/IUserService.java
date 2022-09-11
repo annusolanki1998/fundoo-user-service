@@ -9,15 +9,27 @@ import java.util.List;
 
 public interface IUserService {
 
-    ResponseUtil addUser(UserDTO userDTO);
+    Response addUser(UserDTO userDTO);
 
-    Response login(String emailId, String password);
+    ResponseUtil login(String emailId, String password);
 
-    ResponseUtil updateUser(UserDTO userDTO, Long id, String token);
+    Response updateUser(UserDTO userDTO, Long id, String token);
 
     List<UserModel> getUsers(String token);
 
-    ResponseUtil deleteUser(Long id, String token);
+    Response deleteUser(Long id, String token);
 
-    ResponseUtil getUser(Long id, String token);
+    Response getUser(Long id, String token);
+
+    Response updatePassword(String token, String password);
+
+    Response resetPassword(String emailId);
+
+    Boolean validate(String token);
+
+    Response restoreUser(Long id, String token);
+
+    Response deleteUsers(Long id, String token);
+
+    Response deletePermanent(Long id, String token);
 }

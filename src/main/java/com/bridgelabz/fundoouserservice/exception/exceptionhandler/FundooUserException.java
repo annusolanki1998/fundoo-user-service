@@ -2,7 +2,7 @@ package com.bridgelabz.fundoouserservice.exception.exceptionhandler;
 
 import com.bridgelabz.fundoouserservice.exception.CustomValidationException;
 import com.bridgelabz.fundoouserservice.exception.FundooUserNotFoundException;
-import com.bridgelabz.fundoouserservice.util.Response;
+import com.bridgelabz.fundoouserservice.util.ResponseUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -19,8 +19,8 @@ public class FundooUserException {
      * */
 
     @ExceptionHandler(FundooUserNotFoundException.class)
-    public ResponseEntity<Response> handlerHiringException(FundooUserNotFoundException exception) {
-        Response response = new Response();
+    public ResponseEntity<ResponseUtil> handlerHiringException(FundooUserNotFoundException exception) {
+        ResponseUtil response = new ResponseUtil();
         response.setErrorCode(400);
         response.setMessage(exception.getMessage());
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);

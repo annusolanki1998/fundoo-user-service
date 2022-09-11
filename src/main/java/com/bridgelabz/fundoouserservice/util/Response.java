@@ -1,23 +1,16 @@
 package com.bridgelabz.fundoouserservice.util;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
-/*
- * Purpose : Response used to handle the exception
- * Version : 1.0
- * @author : Annu Kumari
- * */
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Response {
-    private int errorCode;
-    private String message;
-    private Object token;
+    private int statusCode;
+    private String statusMessage;
+    private Object object;
 
-
-    public Response() {
-
-    }
 }

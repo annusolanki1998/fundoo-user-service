@@ -20,8 +20,9 @@ public class MailService {
 
     /**
      * Purpose: Creating method to send Email
+     *
      * @author: Annu Kumari
-     * @Param: email,subject and body
+     * @Param: email, subject and body
      */
 
     public static void send(String toEmail, String subject, String body) {

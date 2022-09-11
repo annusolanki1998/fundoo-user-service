@@ -19,32 +19,29 @@ public class UserService implements IUserService {
 
     @Autowired
     UserRepository userRepository;
-
     @Autowired
     TokenUtil tokenUtil;
-
     @Autowired
     MailService mailService;
 
-
     @Override
-    public ResponseUtil addUser(UserDTO userDTO) {
+    public Response addUser(UserDTO userDTO) {
         UserModel userModel = new UserModel(userDTO);
         userModel.setCreatedAt(LocalDateTime.now());
         userRepository.save(userModel);
         String body = "Fundoo user is added sucessfully with userId " + userModel.getId();
         String subject = "Fundoo user is added sucessfully";
         mailService.send(userModel.getEmailId(), body, subject);
-        return new ResponseUtil(200, "sucessfully", userModel);
+        return new Response(200, "sucessfully", userModel);
     }
 
     @Override
-    public Response login(String emailId, String password) {
+    public ResponseUtil login(String emailId, String password) {
         Optional<UserModel> isEmailPresent = userRepository.findByEmailId(emailId);
         if (isEmailPresent.isPresent()) {
             if (isEmailPresent.get().getPassword().equals(password)) {
                 String token = tokenUtil.createToken(isEmailPresent.get().getId());
-                return new Response(200, "Login sucessfully", token);
+                return new ResponseUtil(200, "Login sucessfully", token);
             }
             throw new FundooUserNotFoundException(400, "Password is wrong");
         }
@@ -52,7 +49,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public ResponseUtil updateUser(UserDTO userDTO, Long id, String token) {
+    public Response updateUser(UserDTO userDTO, Long id, String token) {
         Long userId = tokenUtil.decodeToken(token);
         Optional<UserModel> isId = userRepository.findById(userId);
         if (isId.isPresent()) {
@@ -61,8 +58,6 @@ public class UserService implements IUserService {
                 isUserPresent.get().setName(userDTO.getName());
                 isUserPresent.get().setEmailId(userDTO.getEmailId());
                 isUserPresent.get().setPassword(userDTO.getPassword());
-                isUserPresent.get().setIsActive(userDTO.getIsActive());
-                isUserPresent.get().setIsDeleted(userDTO.getIsDeleted());
                 isUserPresent.get().setDOB(userDTO.getDOB());
                 isUserPresent.get().setPhoneNumber(userDTO.getPhoneNumber());
                 isUserPresent.get().setProfilePic(userDTO.getProfilePic());
@@ -70,7 +65,7 @@ public class UserService implements IUserService {
                 String body = "Fundoo user is added sucessfully with userId" + isUserPresent.get().getId();
                 String subject = "Fundoo user is added sucessfully";
                 mailService.send(isUserPresent.get().getEmailId(), body, subject);
-                return new ResponseUtil(200, "Sucessfully", isUserPresent.get());
+                return new Response(200, "Sucessfully", isUserPresent.get());
             } else {
                 throw new FundooUserNotFoundException(400, "User not present");
             }
@@ -94,14 +89,14 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public ResponseUtil deleteUser(Long id, String token) {
+    public Response deleteUser(Long id, String token) {
         Long userId = tokenUtil.decodeToken(token);
         Optional<UserModel> isId = userRepository.findById(userId);
         if (isId.isPresent()) {
             Optional<UserModel> isUserPresent = userRepository.findById(id);
             if (isUserPresent.isPresent()) {
                 userRepository.delete(isUserPresent.get());
-                return new ResponseUtil(200, "Sucessfully", isUserPresent.get());
+                return new Response(200, "Sucessfully", isUserPresent.get());
             } else {
                 throw new FundooUserNotFoundException(400, "User not present");
             }
@@ -110,17 +105,116 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public ResponseUtil getUser(Long id, String token) {
+    public Response getUser(Long id, String token) {
         Long userId = tokenUtil.decodeToken(token);
         Optional<UserModel> isId = userRepository.findById(userId);
         if (isId.isPresent()) {
             Optional<UserModel> isUserPresent = userRepository.findById(id);
             if (isUserPresent.isPresent()) {
-                return new ResponseUtil(200, "Sucessfully", isUserPresent.get());
+                return new Response(200, "Sucessfully", isUserPresent.get());
             } else {
                 throw new FundooUserNotFoundException(400, "User not present");
             }
         }
         throw new FundooUserNotFoundException(400, "Token is wrong");
     }
+
+    @Override
+    public Response updatePassword(String token, String password) {
+        Long userId = tokenUtil.decodeToken(token);
+        Optional<UserModel> isId = userRepository.findById(userId);
+        if (isId.isPresent()) {
+            isId.get().setPassword(password);
+            userRepository.save(isId.get());
+            return new Response(200, "Sucessfully", isId.get());
+        } else {
+            throw new FundooUserNotFoundException(400, "Token is wrong");
+        }
+    }
+
+    @Override
+    public Response resetPassword(String emailId) {
+        Optional<UserModel> isEmailPresent = userRepository.findByEmailId(emailId);
+        if (isEmailPresent.isPresent()) {
+            String token = tokenUtil.createToken(isEmailPresent.get().getId());
+            String url = System.getenv("url");
+            String body = "Reset the password using this link \n " + url +
+                    "\n This token is use to reset the password \n" + token;
+            String subject = "Reset password sucessfully";
+            mailService.send(isEmailPresent.get().getEmailId(), body, subject);
+            return new Response(200, "Sucessfull", isEmailPresent.get());
+        } else {
+            throw new FundooUserNotFoundException(400, "Wrong email id");
+        }
+
+    }
+
+    @Override
+    public Boolean validate(String token) {
+        Long userId = tokenUtil.decodeToken(token);
+        Optional<UserModel> isId = userRepository.findById(userId);
+        if (isId.isPresent()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public Response restoreUser(Long id, String token) {
+        Long userId = tokenUtil.decodeToken(token);
+        Optional<UserModel> isId = userRepository.findById(userId);
+        if (isId.isPresent()) {
+            Optional<UserModel> isUserPresent = userRepository.findById(id);
+            if (isUserPresent.isPresent()) {
+                isUserPresent.get().setActive(true);
+                isUserPresent.get().setDeleted(false);
+                userRepository.save(isUserPresent.get());
+                return new Response(200, "Sucessfully", isUserPresent.get());
+            } else {
+                throw new FundooUserNotFoundException(400, "User not found with this id");
+            }
+        } else {
+            throw new FundooUserNotFoundException(400, "Token is wrong");
+        }
+    }
+
+    @Override
+    public Response deleteUsers(Long id, String token) {
+        Long userId = tokenUtil.decodeToken(token);
+        Optional<UserModel> isId = userRepository.findById(userId);
+        if (isId.isPresent()) {
+            Optional<UserModel> isUserPresent = userRepository.findById(id);
+            if (isUserPresent.isPresent()) {
+                isUserPresent.get().setActive(false);
+                isUserPresent.get().setDeleted(true);
+                userRepository.save(isUserPresent.get());
+                return new Response(200, "Sucessfully", isUserPresent.get());
+            } else {
+                throw new FundooUserNotFoundException(400, "User not found with this id");
+            }
+        } else {
+            throw new FundooUserNotFoundException(400, "Token is wrong");
+        }
+    }
+
+    @Override
+    public Response deletePermanent(Long id, String token) {
+        Long userId = tokenUtil.decodeToken(token);
+        Optional<UserModel> isId = userRepository.findById(userId);
+        if (isId.isPresent()) {
+            Optional<UserModel> isUserPresent = userRepository.findById(id);
+            if (isUserPresent.isPresent()) {
+                userRepository.delete(isUserPresent.get());
+                return new Response(200, "Sucessfully", isUserPresent.get());
+            } else {
+                throw new FundooUserNotFoundException(400, "User not found with this id");
+            }
+        } else {
+            throw new FundooUserNotFoundException(400, "Token is wrong");
+        }
+
+    }
+
 }
+
