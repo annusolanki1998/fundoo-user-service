@@ -9,7 +9,9 @@ import com.bridgelabz.fundoouserservice.util.ResponseUtil;
 import com.bridgelabz.fundoouserservice.util.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -51,8 +53,8 @@ public class UserService implements IUserService {
     @Override
     public Response updateUser(UserDTO userDTO, Long id, String token) {
         Long userId = tokenUtil.decodeToken(token);
-        Optional<UserModel> isId = userRepository.findById(userId);
-        if (isId.isPresent()) {
+        Optional<UserModel> isIdPresent = userRepository.findById(userId);
+        if (isIdPresent.isPresent()) {
             Optional<UserModel> isUserPresent = userRepository.findById(id);
             if (isUserPresent.isPresent()) {
                 isUserPresent.get().setName(userDTO.getName());
@@ -60,7 +62,6 @@ public class UserService implements IUserService {
                 isUserPresent.get().setPassword(userDTO.getPassword());
                 isUserPresent.get().setDOB(userDTO.getDOB());
                 isUserPresent.get().setPhoneNumber(userDTO.getPhoneNumber());
-                isUserPresent.get().setProfilePic(userDTO.getProfilePic());
                 userRepository.save(isUserPresent.get());
                 String body = "Fundoo user is added sucessfully with userId" + isUserPresent.get().getId();
                 String subject = "Fundoo user is added sucessfully";
@@ -76,8 +77,8 @@ public class UserService implements IUserService {
     @Override
     public List<UserModel> getUsers(String token) {
         Long userId = tokenUtil.decodeToken(token);
-        Optional<UserModel> isId = userRepository.findById(userId);
-        if (isId.isPresent()) {
+        Optional<UserModel> isIdPresent = userRepository.findById(userId);
+        if (isIdPresent.isPresent()) {
             List<UserModel> isUserPresent = userRepository.findAll();
             if (isUserPresent.size() > 0) {
                 return isUserPresent;
@@ -91,8 +92,8 @@ public class UserService implements IUserService {
     @Override
     public Response deleteUser(Long id, String token) {
         Long userId = tokenUtil.decodeToken(token);
-        Optional<UserModel> isId = userRepository.findById(userId);
-        if (isId.isPresent()) {
+        Optional<UserModel> isIdPresent = userRepository.findById(userId);
+        if (isIdPresent.isPresent()) {
             Optional<UserModel> isUserPresent = userRepository.findById(id);
             if (isUserPresent.isPresent()) {
                 userRepository.delete(isUserPresent.get());
@@ -107,8 +108,8 @@ public class UserService implements IUserService {
     @Override
     public Response getUser(Long id, String token) {
         Long userId = tokenUtil.decodeToken(token);
-        Optional<UserModel> isId = userRepository.findById(userId);
-        if (isId.isPresent()) {
+        Optional<UserModel> isIdPresent = userRepository.findById(userId);
+        if (isIdPresent.isPresent()) {
             Optional<UserModel> isUserPresent = userRepository.findById(id);
             if (isUserPresent.isPresent()) {
                 return new Response(200, "Sucessfully", isUserPresent.get());
@@ -122,11 +123,11 @@ public class UserService implements IUserService {
     @Override
     public Response updatePassword(String token, String password) {
         Long userId = tokenUtil.decodeToken(token);
-        Optional<UserModel> isId = userRepository.findById(userId);
-        if (isId.isPresent()) {
-            isId.get().setPassword(password);
-            userRepository.save(isId.get());
-            return new Response(200, "Sucessfully", isId.get());
+        Optional<UserModel> isIdPresent = userRepository.findById(userId);
+        if (isIdPresent.isPresent()) {
+            isIdPresent.get().setPassword(password);
+            userRepository.save(isIdPresent.get());
+            return new Response(200, "Sucessfully", isIdPresent.get());
         } else {
             throw new FundooUserNotFoundException(400, "Token is wrong");
         }
@@ -152,8 +153,8 @@ public class UserService implements IUserService {
     @Override
     public Boolean validate(String token) {
         Long userId = tokenUtil.decodeToken(token);
-        Optional<UserModel> isId = userRepository.findById(userId);
-        if (isId.isPresent()) {
+        Optional<UserModel> isIdPresent = userRepository.findById(userId);
+        if (isIdPresent.isPresent()) {
             return true;
         } else {
             return false;
@@ -163,8 +164,8 @@ public class UserService implements IUserService {
     @Override
     public Response restoreUser(Long id, String token) {
         Long userId = tokenUtil.decodeToken(token);
-        Optional<UserModel> isId = userRepository.findById(userId);
-        if (isId.isPresent()) {
+        Optional<UserModel> isIdPresent = userRepository.findById(userId);
+        if (isIdPresent.isPresent()) {
             Optional<UserModel> isUserPresent = userRepository.findById(id);
             if (isUserPresent.isPresent()) {
                 isUserPresent.get().setActive(true);
@@ -182,8 +183,8 @@ public class UserService implements IUserService {
     @Override
     public Response deleteUsers(Long id, String token) {
         Long userId = tokenUtil.decodeToken(token);
-        Optional<UserModel> isId = userRepository.findById(userId);
-        if (isId.isPresent()) {
+        Optional<UserModel> isIdPresent = userRepository.findById(userId);
+        if (isIdPresent.isPresent()) {
             Optional<UserModel> isUserPresent = userRepository.findById(id);
             if (isUserPresent.isPresent()) {
                 isUserPresent.get().setActive(false);
@@ -215,6 +216,29 @@ public class UserService implements IUserService {
         }
 
     }
+
+    @Override
+    public Response addProfilePic(Long id, MultipartFile profilePic) throws IOException {
+        Optional<UserModel> isIdPresent = userRepository.findById(id);
+        if (isIdPresent.isPresent()) {
+            isIdPresent.get().setProfilePic(String.valueOf(profilePic.getBytes()).getBytes());
+            userRepository.save(isIdPresent.get());
+            return new Response(200, "Sucessfully", isIdPresent.get());
+        } else {
+            throw new FundooUserNotFoundException(400, "User not found with this id");
+        }
+    }
+
+    @Override
+    public Boolean validateEmail(String emailId) {
+        Optional<UserModel> isEmailPresent = userRepository.findByEmailId(emailId);
+        if (isEmailPresent.isPresent()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
 }
 

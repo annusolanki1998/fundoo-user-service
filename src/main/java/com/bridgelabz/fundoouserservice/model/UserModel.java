@@ -28,7 +28,9 @@ public class UserModel {
     private boolean deleted;
     private Date DOB;
     private String phoneNumber;
-    private String profilePic;
+
+    @Lob
+    private byte[] profilePic;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -38,7 +40,7 @@ public class UserModel {
         this.password = userDTO.getPassword();
         this.DOB = userDTO.getDOB();
         this.phoneNumber = userDTO.getPhoneNumber();
-        this.profilePic = userDTO.getProfilePic();
+
     }
 
     public UserModel() {

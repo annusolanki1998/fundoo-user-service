@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -104,6 +106,18 @@ public class UserController {
                                                     @RequestHeader String token) {
         Response response = userService.deletePermanent(id, token);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/addProfilePic/{id}")
+    public ResponseEntity<Response> addProfilePic(@RequestParam Long id,
+                                                  @RequestBody MultipartFile profilePic) throws IOException {
+        Response response = userService.addProfilePic(id, profilePic);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/validateEmail")
+    public Boolean validateEmail(@RequestParam String emailId) {
+        return userService.validateEmail(emailId);
     }
 }
 
