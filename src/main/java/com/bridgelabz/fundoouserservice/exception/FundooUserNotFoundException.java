@@ -3,7 +3,7 @@ package com.bridgelabz.fundoouserservice.exception;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /*
- * Purpose : AdminNotFoundException is used to handle the exceptions
+ * Purpose : FundooUserNotFoundException is used to handle the exceptions
  * Version : 1.0
  * @author : Annu kumari
  * */

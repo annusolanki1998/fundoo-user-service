@@ -16,6 +16,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Purpose: Creating service for fundoo user
+ * @author: Annu Kumari
+ * @Param:  business logic is present here
+ * Version: 1.0
+ */
+
 @Service
 public class UserService implements IUserService {
 
@@ -25,6 +32,12 @@ public class UserService implements IUserService {
     TokenUtil tokenUtil;
     @Autowired
     MailService mailService;
+
+    /**
+     * Purpose : Creating method to add fundoo user details
+     * @author : Annu Kumari
+     * @Param : userDto
+     */
 
     @Override
     public Response addUser(UserDTO userDTO) {
@@ -36,6 +49,12 @@ public class UserService implements IUserService {
         mailService.send(userModel.getEmailId(), body, subject);
         return new Response(200, "sucessfully", userModel);
     }
+
+    /**
+     * Purpose : Creating method to login
+     * @author : Annu Kumari
+     * @Param : emailId and password
+     */
 
     @Override
     public ResponseUtil login(String emailId, String password) {
@@ -49,6 +68,12 @@ public class UserService implements IUserService {
         }
         throw new FundooUserNotFoundException(400, "No user is present with this email id");
     }
+
+    /**
+     * Purpose : Creating method to update existing fundoo user
+     * @author : Annu Kumari
+     * @Param : userDto,id and token
+     */
 
     @Override
     public Response updateUser(UserDTO userDTO, Long id, String token) {
@@ -74,6 +99,12 @@ public class UserService implements IUserService {
         throw new FundooUserNotFoundException(400, "Token is wrong");
     }
 
+    /**
+     * Purpose : Creating method to get fundoo user details
+     * @author : Annu Kumari
+     * @Param : token
+     */
+
     @Override
     public List<UserModel> getUsers(String token) {
         Long userId = tokenUtil.decodeToken(token);
@@ -88,6 +119,12 @@ public class UserService implements IUserService {
         }
         throw new FundooUserNotFoundException(400, "Token is wrong");
     }
+
+    /**
+     * Purpose : Creating method to delete existing fundoo user details
+     * @author : Annu Kumari
+     * @Param : id and token
+     */
 
     @Override
     public Response deleteUser(Long id, String token) {
@@ -105,6 +142,12 @@ public class UserService implements IUserService {
         throw new FundooUserNotFoundException(400, "Token is wrong");
     }
 
+    /**
+     * Purpose : Creating method to get fundoo user details
+     * @author : Annu Kumari
+     * @Param : id and token
+     */
+
     @Override
     public Response getUser(Long id, String token) {
         Long userId = tokenUtil.decodeToken(token);
@@ -120,6 +163,12 @@ public class UserService implements IUserService {
         throw new FundooUserNotFoundException(400, "Token is wrong");
     }
 
+    /**
+     * Purpose : Creating method to update password
+     * @author : Annu Kumari
+     * @Param : token and password
+     */
+
     @Override
     public Response updatePassword(String token, String password) {
         Long userId = tokenUtil.decodeToken(token);
@@ -132,6 +181,12 @@ public class UserService implements IUserService {
             throw new FundooUserNotFoundException(400, "Token is wrong");
         }
     }
+
+    /**
+     * Purpose : Creating method to reset password
+     * @author : Annu Kumari
+     * @Param : emailId
+     */
 
     @Override
     public Response resetPassword(String emailId) {
@@ -150,6 +205,12 @@ public class UserService implements IUserService {
 
     }
 
+    /**
+     * Purpose : Creating method to validate user
+     * @author : Annu Kumari
+     * @Param : token
+     */
+
     @Override
     public Boolean validate(String token) {
         Long userId = tokenUtil.decodeToken(token);
@@ -160,6 +221,12 @@ public class UserService implements IUserService {
             return false;
         }
     }
+
+    /**
+     * Purpose : Creating method to restore user
+     * @author : Annu Kumari
+     * @Param : id and token
+     */
 
     @Override
     public Response restoreUser(Long id, String token) {
@@ -180,6 +247,12 @@ public class UserService implements IUserService {
         }
     }
 
+    /**
+     * Purpose : Creating method to delete existing fundoo user
+     * @author : Annu Kumari
+     * @Param : id and token
+     */
+
     @Override
     public Response deleteUsers(Long id, String token) {
         Long userId = tokenUtil.decodeToken(token);
@@ -199,6 +272,12 @@ public class UserService implements IUserService {
         }
     }
 
+    /**
+     * Purpose : Creating method to delete permanent existing fundoo user
+     * @author : Annu Kumari
+     * @Param : id and token
+     */
+
     @Override
     public Response deletePermanent(Long id, String token) {
         Long userId = tokenUtil.decodeToken(token);
@@ -217,6 +296,12 @@ public class UserService implements IUserService {
 
     }
 
+    /**
+     * Purpose : Creating method to add profile path
+     * @author : Annu Kumari
+     * @Param : id and profilePath
+     */
+
     @Override
     public Response addProfilePic(Long id, MultipartFile profilePic) throws IOException {
         Optional<UserModel> isIdPresent = userRepository.findById(id);
@@ -228,6 +313,12 @@ public class UserService implements IUserService {
             throw new FundooUserNotFoundException(400, "User not found with this id");
         }
     }
+
+    /**
+     * Purpose : Creating method to validate email
+     * @author : Annu Kumari
+     * @Param : emailId
+     */
 
     @Override
     public Boolean validateEmail(String emailId) {

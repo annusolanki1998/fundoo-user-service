@@ -34,6 +34,4 @@ public class UserDTO {
     @Pattern(regexp = "[+]91 [6-9]\\d{9}", message = "Invalid phone number")
     private String phoneNumber;
 
-
-
 }

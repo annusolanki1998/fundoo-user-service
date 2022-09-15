@@ -27,11 +27,23 @@ public class UserController {
         return "Welcome to fundoo user project";
     }
 
+    /*
+     * Purpose: Create fundoo user
+     * @author: Annu Kumari
+     * @Param: usereDTO
+     * */
+
     @PostMapping("/addUser")
     public ResponseEntity<Response> addUser(@Valid @RequestBody UserDTO userDTO) {
         Response response = userService.addUser(userDTO);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    /*
+     * Purpose : Create token
+     * @author : Annu Kumari
+     * @Param : emailId and password
+     * */
 
     @PostMapping("/login")
     public ResponseEntity<ResponseUtil> login(@RequestParam String emailId,
@@ -39,6 +51,12 @@ public class UserController {
         ResponseUtil response = userService.login(emailId, password);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    /*
+     * Purpose : Update existing user details by using id
+     * @author : Annu Kumari
+     * @Param :  id,userDTO and token
+     * */
 
     @PutMapping("/updateUser/{id}")
     public ResponseEntity<Response> updateUser(@Valid @RequestBody UserDTO userDTO,
@@ -48,11 +66,23 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /*
+     * Purpose : Retrieve all user details
+     * @author : Annu Kumari
+     * @Param :  token
+     * */
+
     @GetMapping("/getUser")
     public ResponseEntity<List> getUsers(@RequestHeader String token) {
         List<UserModel> responseUtil = userService.getUsers(token);
         return new ResponseEntity<>(responseUtil, HttpStatus.OK);
     }
+
+    /*
+     * Purpose : Delete existing user details by using id
+     * @author : Annu Kumari
+     * @Param : id and token
+     * */
 
     @DeleteMapping("/deleteUser/{id}")
     public ResponseEntity<Response> deleteUser(@RequestHeader String token,
@@ -61,12 +91,24 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /*
+     * Purpose : Retrieve existing user details by using id
+     * @author : Annu Kumari
+     * @Param :  id and token
+     * */
+
     @GetMapping("/getUser/{id}")
     public ResponseEntity<Response> getUser(@RequestParam Long id,
                                             @RequestHeader String token) {
         Response response = userService.getUser(id, token);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    /*
+     * Purpose : Update password
+     * @author : Annu Kumari
+     * @Param :  token and password
+     * */
 
     @PutMapping("/updatePassword")
     public ResponseEntity<Response> updatePassword(@RequestHeader String token,
@@ -75,16 +117,34 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /*
+     * Purpose : Reset password
+     * @author : Annu Kumari
+     * @Param :  emailId
+     * */
+
     @PutMapping("/resetPassword")
     public ResponseEntity<Response> resetPassword(@RequestParam String emailId) {
         Response response = userService.resetPassword(emailId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /*
+     * Purpose : Get validate user
+     * @author : Annu Kumari
+     * @Param :  token
+     * */
+
     @GetMapping("/validate/{token}")
     public Boolean validate(@PathVariable String token) {
         return userService.validate(token);
     }
+
+    /*
+     * Purpose : Restore user
+     * @author : Annu Kumari
+     * @Param : id and token
+     * */
 
     @PutMapping("/restoreUser")
     public ResponseEntity<Response> restoreUser(@RequestParam Long id,
@@ -93,6 +153,11 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /*
+     * Purpose : Delete existing user details by using id
+     * @author : Annu Kumari
+     * @Param : id and token
+     * */
     @DeleteMapping("/deleteUsers")
     public ResponseEntity<Response> deleteUsers(@RequestParam Long id,
                                                 @RequestHeader String token) {
@@ -100,6 +165,11 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /*
+     * Purpose : Delete permanent user details by using id
+     * @author : Annu Kumari
+     * @Param : id and token
+     * */
 
     @DeleteMapping("/deletePermanent")
     public ResponseEntity<Response> deletePermanent(@RequestParam Long id,
@@ -108,6 +178,12 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /*
+     * Purpose : Add profile pic by using id
+     * @author : Annu Kumari
+     * @Param : id and profilePic
+     * */
+
     @PostMapping("/addProfilePic/{id}")
     public ResponseEntity<Response> addProfilePic(@RequestParam Long id,
                                                   @RequestBody MultipartFile profilePic) throws IOException {
@@ -115,7 +191,13 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/validateEmail")
+    /*
+     * Purpose : Get validate emailId
+     * @author : Annu Kumari
+     * @Param : emailId
+     * */
+
+    @GetMapping("/validateEmail/{emailId}")
     public Boolean validateEmail(@RequestParam String emailId) {
         return userService.validateEmail(emailId);
     }

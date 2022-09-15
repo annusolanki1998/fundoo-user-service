@@ -24,10 +24,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /*
- * Purpose :Execute all REST Apis
+ * Purpose : Execute all REST Apis
  * Version : 3.0
  * @author : Annu Kumari
- * @Visit Link :  http://localhost:9091/swagger-ui/
+ * @Visit Link : http://localhost:9091/swagger-ui/
  *
  * */
 
@@ -36,26 +36,6 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
 
-
-
-
-   /*@Bean
-
-   public Docket api() {
-
-       return new Docket(DocumentationType.SWAGGER_2)
-
-               .select()
-
-               .apis(RequestHandlerSelectors.any())
-
-               .paths(PathSelectors.any())
-
-               .build()
-
-               .apiInfo(getApiInfo());
-
-   }*/
 
     @Bean
 
@@ -158,22 +138,6 @@ public class SpringFoxConfig implements WebMvcConfigurer {
 
     }
 
-   /*private ApiInfo getApiInfo() {
-
-       Contact contact = new Contact("Learner Management System", "http://bridgelabz.com&quot;,
-
-               "sunil.patil@bridgelabz.com");
-
-       return new ApiInfoBuilder().title("LMS Service Swagger API")
-
-               .description("LMS Service Swagger API for Learner Management System").version("0.0.1-SNAPSHOT")
-
-               .license("Apache 2.0").licenseUrl("http://www.apache.org/licenses/LICENSE-2.0").contact(contact)
-
-               .build();
-
-   }*/
-
     List<SecurityReference> defaultAuth() {
 
         AuthorizationScope authorizationScope
@@ -207,6 +171,4 @@ public class SpringFoxConfig implements WebMvcConfigurer {
                 Collections.emptyList());
 
     }
-
-
 }
