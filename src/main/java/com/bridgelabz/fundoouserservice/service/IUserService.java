@@ -3,6 +3,7 @@ package com.bridgelabz.fundoouserservice.service;
 import com.bridgelabz.fundoouserservice.dto.UserDTO;
 import com.bridgelabz.fundoouserservice.model.UserModel;
 import com.bridgelabz.fundoouserservice.util.Response;
+import com.bridgelabz.fundoouserservice.util.ResponseClass;
 import com.bridgelabz.fundoouserservice.util.ResponseUtil;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,8 +12,9 @@ import java.util.List;
 
 /**
  * Purpose: Creating Interface for fundoo user service
+ *
  * @author: Annu Kumari
- * @Param:   All service methods
+ * @Param: All service methods
  * Version:  1.0
  */
 
@@ -44,5 +46,7 @@ public interface IUserService {
 
     Response addProfilePic(Long id, MultipartFile profilePic) throws IOException;
 
-    Boolean validateEmail(String emailId);
+    ResponseClass validateEmail(String emailId);
+
+    // ResponseClass validates(String token);
 }

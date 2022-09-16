@@ -5,6 +5,7 @@ import com.bridgelabz.fundoouserservice.exception.FundooUserNotFoundException;
 import com.bridgelabz.fundoouserservice.model.UserModel;
 import com.bridgelabz.fundoouserservice.repository.UserRepository;
 import com.bridgelabz.fundoouserservice.util.Response;
+import com.bridgelabz.fundoouserservice.util.ResponseClass;
 import com.bridgelabz.fundoouserservice.util.ResponseUtil;
 import com.bridgelabz.fundoouserservice.util.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +18,11 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Purpose: Creating service for fundoo user
- * @author: Annu Kumari
- * @Param:  business logic is present here
- * Version: 1.0
+ * Purpose : Creating service for fundoo user
+ *
+ * @author : Annu Kumari
+ * @Param : business logic is present here
+ * Version : 1.0
  */
 
 @Service
@@ -35,8 +37,9 @@ public class UserService implements IUserService {
 
     /**
      * Purpose : Creating method to add fundoo user details
+     *
      * @author : Annu Kumari
-     * @Param : userDto
+     * @Param : userDTO
      */
 
     @Override
@@ -52,6 +55,7 @@ public class UserService implements IUserService {
 
     /**
      * Purpose : Creating method to login
+     *
      * @author : Annu Kumari
      * @Param : emailId and password
      */
@@ -71,8 +75,9 @@ public class UserService implements IUserService {
 
     /**
      * Purpose : Creating method to update existing fundoo user
+     *
      * @author : Annu Kumari
-     * @Param : userDto,id and token
+     * @Param : userDTO,id and token
      */
 
     @Override
@@ -101,6 +106,7 @@ public class UserService implements IUserService {
 
     /**
      * Purpose : Creating method to get fundoo user details
+     *
      * @author : Annu Kumari
      * @Param : token
      */
@@ -122,6 +128,7 @@ public class UserService implements IUserService {
 
     /**
      * Purpose : Creating method to delete existing fundoo user details
+     *
      * @author : Annu Kumari
      * @Param : id and token
      */
@@ -144,6 +151,7 @@ public class UserService implements IUserService {
 
     /**
      * Purpose : Creating method to get fundoo user details
+     *
      * @author : Annu Kumari
      * @Param : id and token
      */
@@ -165,6 +173,7 @@ public class UserService implements IUserService {
 
     /**
      * Purpose : Creating method to update password
+     *
      * @author : Annu Kumari
      * @Param : token and password
      */
@@ -184,6 +193,7 @@ public class UserService implements IUserService {
 
     /**
      * Purpose : Creating method to reset password
+     *
      * @author : Annu Kumari
      * @Param : emailId
      */
@@ -224,6 +234,7 @@ public class UserService implements IUserService {
 
     /**
      * Purpose : Creating method to restore user
+     *
      * @author : Annu Kumari
      * @Param : id and token
      */
@@ -249,6 +260,7 @@ public class UserService implements IUserService {
 
     /**
      * Purpose : Creating method to delete existing fundoo user
+     *
      * @author : Annu Kumari
      * @Param : id and token
      */
@@ -274,6 +286,7 @@ public class UserService implements IUserService {
 
     /**
      * Purpose : Creating method to delete permanent existing fundoo user
+     *
      * @author : Annu Kumari
      * @Param : id and token
      */
@@ -298,6 +311,7 @@ public class UserService implements IUserService {
 
     /**
      * Purpose : Creating method to add profile path
+     *
      * @author : Annu Kumari
      * @Param : id and profilePath
      */
@@ -316,19 +330,31 @@ public class UserService implements IUserService {
 
     /**
      * Purpose : Creating method to validate email
+     *
      * @author : Annu Kumari
      * @Param : emailId
      */
 
     @Override
-    public Boolean validateEmail(String emailId) {
+    public ResponseClass validateEmail(String emailId) {
         Optional<UserModel> isEmailPresent = userRepository.findByEmailId(emailId);
         if (isEmailPresent.isPresent()) {
-            return true;
+            return new ResponseClass(200, "User email is present", isEmailPresent.get());
         } else {
-            return false;
+            throw new FundooUserNotFoundException(400, "User not found with this email id");
         }
     }
+
+//    @Override
+//    public ResponseClass validates(String token) {
+//        Long userId = tokenUtil.decodeToken(token);
+//        Optional<UserModel> isIdPresent = userRepository.findById(userId);
+//        if (isIdPresent.isPresent()) {
+//            return new ResponseClass(200, "User email is present", isIdPresent.get());
+//        } else {
+//            throw new FundooUserNotFoundException(400, "User not found with this email id");
+//        }
+//    }
 
 
 }

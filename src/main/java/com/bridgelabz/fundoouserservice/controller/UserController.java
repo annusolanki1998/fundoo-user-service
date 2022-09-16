@@ -4,6 +4,7 @@ import com.bridgelabz.fundoouserservice.dto.UserDTO;
 import com.bridgelabz.fundoouserservice.model.UserModel;
 import com.bridgelabz.fundoouserservice.service.IUserService;
 import com.bridgelabz.fundoouserservice.util.Response;
+import com.bridgelabz.fundoouserservice.util.ResponseClass;
 import com.bridgelabz.fundoouserservice.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -140,6 +141,14 @@ public class UserController {
         return userService.validate(token);
     }
 
+//    @GetMapping("/validates/{token}")
+//    public ResponseEntity<ResponseClass> validates(@RequestHeader String token) {
+//        ResponseClass responseClass = userService.validates(token);
+//        return new ResponseEntity<>(responseClass,HttpStatus.OK);
+//    }
+
+
+
     /*
      * Purpose : Restore user
      * @author : Annu Kumari
@@ -198,8 +207,9 @@ public class UserController {
      * */
 
     @GetMapping("/validateEmail/{emailId}")
-    public Boolean validateEmail(@RequestParam String emailId) {
-        return userService.validateEmail(emailId);
+    public ResponseEntity<ResponseClass> validateEmail(@RequestParam String emailId) {
+        ResponseClass responseClass = userService.validateEmail(emailId);
+        return new ResponseEntity<>(responseClass,HttpStatus.OK);
     }
 }
 
